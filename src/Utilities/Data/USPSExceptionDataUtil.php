@@ -146,6 +146,22 @@ class USPSExceptionDataUtil
     /**
      * @return int
      */
+    public static function getInvalidUSPSUserId()
+    {
+        return 98;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getInvalidUSPSUserMessage()
+    {
+        return 'Invalid USPS_USER_ID';
+    }
+
+    /**
+     * @return int
+     */
     public static function getConnectionErrorId()
     {
         return 99;
