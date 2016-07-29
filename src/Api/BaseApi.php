@@ -5,8 +5,11 @@ namespace jamesvweston\USPS\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use jamesvweston\USPS\Exceptions\USPS\InvalidUSPSUserException;
 use jamesvweston\USPS\Exceptions\USPS\USPSConnectionException;
+use jamesvweston\USPS\Exceptions\USPS\USPSUnknownException;
 use jamesvweston\USPS\Exceptions\USPS\USPSXMLSyntaxException;
+use jamesvweston\USPS\Utilities\StringUtil;
 use jamesvweston\USPS\Utilities\XMLUtil;
 
 abstract class BaseApi
@@ -60,14 +63,28 @@ abstract class BaseApi
             throw new USPSConnectionException();
 
         $responseArray                  = XMLUtil::createArray($contents);
-
+        
         if ($this->responseHasError($responseArray))
-        {
-            if (preg_match("/XML Syntax Error/", $responseArray['Error']['Description']))
-                throw new USPSXMLSyntaxException();
-        }
+            $this->parseResponseErrors($responseArray['Error']['Description']);
         
         return $responseArray;
+    }
+
+    /**
+     * @param   string      $description
+     * @throws  InvalidUSPSUserException
+     * @throws  USPSUnknownException
+     * @throws  USPSXMLSyntaxException
+     */
+    private function parseResponseErrors($description)
+    {
+        if (StringUtil::hasValue('XML Syntax Error', $description))
+            throw new USPSXMLSyntaxException();
+        else if (StringUtil::hasValue('Username exceeds maximum length', $description)
+            || StringUtil::hasValue('Authorization failure', $description))
+            throw new InvalidUSPSUserException();
+        else
+            throw new USPSUnknownException($description);
     }
     
     /**
