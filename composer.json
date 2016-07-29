@@ -1,0 +1,39 @@
+{
+  "name": "jamesvweston/usps-php",
+  "description": "A PHP Wrapper For The USPS API",
+  "keywords": [
+    "php",
+    "usps"
+  ],
+  "license": "MIT",
+  "type": "library",
+  "homepage": "https://github.com/jamesvweston/usps-php",
+  "authors":[
+    {
+      "name": "James Weston",
+      "email": "jamesvweston@users.noreply.github.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "~1.0",
+    "guzzlehttp/guzzle": "^6.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "jamesvweston\\USPS\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "jamesvweston\\USPS\\Tests\\": "tests"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable" : false
+}
