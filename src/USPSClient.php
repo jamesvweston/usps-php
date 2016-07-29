@@ -3,7 +3,7 @@
 namespace jamesvweston\USPS;
 
 
-use Dotenv;
+use Dotenv\Dotenv;
 use jamesvweston\USPS\Api\AddressApi;
 use jamesvweston\USPS\Api\ApiConfiguration;
 use jamesvweston\USPS\Exceptions\InvalidConfigurationException;
@@ -25,7 +25,8 @@ class USPSClient
             if (!is_dir($config))
                 throw new InvalidConfigurationException('The provided directory location does not exist at ' . $config, 400);
 
-            Dotenv::load($config);
+            $dotEnv                         = new Dotenv($config);
+            $dotEnv->load();
 
             $data = [
                 'userId'                    => getenv('USPS_USER_ID'),
