@@ -3,8 +3,8 @@ A Basic, Low-Level PHP Wrapper For The USPS API
 
 ## Features
 
-* A simple, object-oriented PHP wrapper for the USPS API
-* Your USPS USER_ID is the only required credential
+* An object-oriented PHP wrapper for the USPS API
+* Your USPS USER_ID and selection of environment (production or development) is the only required credential
 * Properly documented, PHP doc blocks, and simple to use
 * Full suite of PHP unit tests
 
@@ -32,6 +32,7 @@ $addressValidateRequest = new AddressValidateRequest();
 //  Add the address to the request
 $addressValidateRequest->addAddress($address);
 
+//  Make the request
 $response               = $addressApi->validateAddress($addressValidateRequest);
 ```
 
@@ -43,10 +44,30 @@ composer require jamesvweston/usps-php
 
 ## Configuration
 
-Configure the following environment variables or pass these values as an associative array to the USPSClient
+The following variables are required by the USPSClient
 
 * **USPS_USER_ID**      - User id provided by the USPS
 * **USPS_ENVIRONMENT**  - production or development
+
+## Example USPSClient Instantiation With .env File
+
+```php
+//  Instantiate the client with the path that the .env is located
+$uspsClient             = new USPSClient('./');
+```
+
+## Example USPSClient Instantiation With Array
+
+```php
+//  Build the array
+$config = [
+    'USPS_USER_ID'      => 'xxxxx',
+    'USPS_ENVIRONMENT'  => 'production',
+];
+
+//  Instantiate the USPSClient with the $config array
+$uspsClient             = new USPSClient($config);
+```
 
 ## Unit Testing
 From the command line run the following
