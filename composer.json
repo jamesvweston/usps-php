@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "vlucas/phpdotenv": "~1.0",
+    "vlucas/phpdotenv": "1.0.0",
     "guzzlehttp/guzzle": "^6.2"
   },
   "require-dev": {
