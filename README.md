@@ -1,5 +1,5 @@
 # usps-php
-A Basic, Low-Level PHP Wrapper For Caravana's API
+A Basic, Low-Level PHP Wrapper For The USPS API
 
 ## Features
 
