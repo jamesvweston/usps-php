@@ -35,8 +35,8 @@ class USPSClient
             if (is_array($config)) 
             {
                 $data = [
-                    'userId'                => ArrayUtil::get($config['userId']),
-                    'environment'           => ArrayUtil::get($config['environment']),
+                    'userId'                => ArrayUtil::get($config['USPS_USER_ID']),
+                    'environment'           => ArrayUtil::get($config['USPS_ENVIRONMENT']),
                 ];
             } else {
                 throw new \InvalidArgumentException('A configuration must be provided');
