@@ -3,7 +3,7 @@
 namespace jamesvweston\USPS\Models\Errors;
 
 
-use jamesvweston\USPS\Utilities\ArrayUtil AS AU;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 use jamesvweston\USPS\Utilities\Data\USPSExceptionDataUtil;
 
 class USPSError implements \JsonSerializable

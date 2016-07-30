@@ -5,7 +5,7 @@ namespace jamesvweston\USPS\Models\Requests;
 
 use jamesvweston\USPS\Models\Address;
 use jamesvweston\USPS\Models\Contracts\XMLRequestContract;
-use jamesvweston\USPS\Utilities\ArrayUtil;
+use jamesvweston\Utilities\ArrayUtil;
 
 class AddressValidateRequest implements XMLRequestContract
 {

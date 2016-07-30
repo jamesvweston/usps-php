@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 use jamesvweston\USPS\Api\AddressApi;
 use jamesvweston\USPS\Api\ApiConfiguration;
 use jamesvweston\USPS\Exceptions\InvalidConfigurationException;
-use jamesvweston\USPS\Utilities\ArrayUtil;
+use jamesvweston\Utilities\ArrayUtil;
 
 class USPSClient
 {

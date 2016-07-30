@@ -3,7 +3,7 @@
 namespace jamesvweston\USPS\Models;
 
 use jamesvweston\USPS\Models\Contracts\XMLRequestContract;
-use jamesvweston\USPS\Utilities\ArrayUtil AS AU;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class BaseAddress implements \JsonSerializable, XMLRequestContract
 {

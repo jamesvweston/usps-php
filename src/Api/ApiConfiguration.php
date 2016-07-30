@@ -3,7 +3,7 @@
 namespace jamesvweston\USPS\Api;
 
 
-use jamesvweston\USPS\Utilities\ArrayUtil;
+use jamesvweston\Utilities\ArrayUtil;
 
 class ApiConfiguration
 {

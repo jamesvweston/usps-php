@@ -9,7 +9,7 @@ use jamesvweston\USPS\Exceptions\USPS\InvalidUSPSUserException;
 use jamesvweston\USPS\Exceptions\USPS\USPSConnectionException;
 use jamesvweston\USPS\Exceptions\USPS\USPSUnknownException;
 use jamesvweston\USPS\Exceptions\USPS\USPSXMLSyntaxException;
-use jamesvweston\USPS\Utilities\StringUtil;
+use jamesvweston\Utilities\StringUtil;
 use jamesvweston\USPS\Utilities\XMLUtil;
 
 abstract class BaseApi
@@ -78,10 +78,10 @@ abstract class BaseApi
      */
     private function parseResponseErrors($description)
     {
-        if (StringUtil::hasValue('XML Syntax Error', $description))
+        if (StringUtil::contains('XML Syntax Error', $description))
             throw new USPSXMLSyntaxException();
-        else if (StringUtil::hasValue('Username exceeds maximum length', $description)
-            || StringUtil::hasValue('Authorization failure', $description))
+        else if (StringUtil::contains('Username exceeds maximum length', $description)
+            || StringUtil::contains('Authorization failure', $description))
             throw new InvalidUSPSUserException();
         else
             throw new USPSUnknownException($description);

@@ -9,7 +9,7 @@ use jamesvweston\USPS\Exceptions\Address\InvalidStateException;
 use jamesvweston\USPS\Exceptions\Address\MultipleAddressesFoundException;
 use jamesvweston\USPS\Exceptions\USPS\USPSUnknownException;
 use jamesvweston\USPS\Exceptions\USPS\USPSXMLSyntaxException;
-use jamesvweston\USPS\Utilities\StringUtil;
+use jamesvweston\Utilities\StringUtil;
 
 class USPSExceptionDataUtil
 {
@@ -20,9 +20,9 @@ class USPSExceptionDataUtil
      */
     public static function parseApiErrorDescription($description)
     {
-        if (StringUtil::hasValue('XML Syntax Error', $description)) 
+        if (StringUtil::contains('XML Syntax Error', $description)) 
             return new USPSXMLSyntaxException();
-        else if (StringUtil::hasValue('Address Not Found', $description))
+        else if (StringUtil::contains('Address Not Found', $description))
             return new AddressNotFoundException();
         else if (preg_match("/Multiple addresses were found/", $description))
             return new MultipleAddressesFoundException();

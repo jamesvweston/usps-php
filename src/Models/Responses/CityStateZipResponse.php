@@ -4,7 +4,7 @@ namespace jamesvweston\USPS\Models\Responses;
 
 
 use jamesvweston\USPS\Models\Traits\USPSErrorTrait;
-use jamesvweston\USPS\Utilities\ArrayUtil AS AU;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class CityStateZipResponse implements \JsonSerializable
 {

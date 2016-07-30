@@ -11,7 +11,7 @@ use jamesvweston\USPS\Models\Responses\AddressResponse;
 use jamesvweston\USPS\Models\Responses\AddressValidateResponse;
 use jamesvweston\USPS\Models\Responses\CityStateZipResponse;
 use jamesvweston\USPS\Models\Responses\ZipCodeLookUpResponse;
-use jamesvweston\USPS\Utilities\ArrayUtil AS AU;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class AddressApi extends BaseApi
 {

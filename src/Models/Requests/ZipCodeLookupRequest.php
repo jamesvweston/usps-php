@@ -5,7 +5,7 @@ namespace jamesvweston\USPS\Models\Requests;
 
 use jamesvweston\USPS\Models\BaseAddress;
 use jamesvweston\USPS\Models\Contracts\XMLRequestContract;
-use jamesvweston\USPS\Utilities\ArrayUtil AS AU;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class ZipCodeLookupRequest implements XMLRequestContract
 {
