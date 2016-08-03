@@ -21,7 +21,7 @@ class AddressLookUpTest extends \PHPUnit_Framework_TestCase
         $addressValidateRequest->addAddress($savannah);
         
         $response               = $addressApi->validateAddress($addressValidateRequest);
-
+print_r($response->jsonSerialize());die;
         $this->assertInstanceOf('jamesvweston\USPS\Models\Responses\AddressValidateResponse', $response);
         
         foreach ($response->getAddressResponses() AS $addressResponse)

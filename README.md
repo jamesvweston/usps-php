@@ -1,5 +1,6 @@
 # usps-php
 An Object-Oriented And Well Documented PHP Wrapper For The USPS API
+Based on https://www.usps.com/business/web-tools-apis/address-information-api.htm
 
 ## Features
 
