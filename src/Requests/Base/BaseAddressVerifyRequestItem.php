@@ -31,7 +31,7 @@ abstract class BaseAddressVerifyRequestItem implements AddressVerifyRequestItemC
 
     /**
      * City name
-     * City, state, or zip5 are required
+     * City and state or zip5 are required
      * Max characters: 15
      * @var string
      */
@@ -39,7 +39,7 @@ abstract class BaseAddressVerifyRequestItem implements AddressVerifyRequestItemC
 
     /**
      * State two character abbreviation
-     * City, state, or zip5 are required
+     * City and state or zip5 are required
      * Max characters: 2
      * @var string
      */
@@ -55,7 +55,7 @@ abstract class BaseAddressVerifyRequestItem implements AddressVerifyRequestItemC
     /**
      * 5 digit zip code
      * Max characters: 5
-     * City, state, or zip5 are required
+     * City and state or zip5 are required
      * @var string
      */
     protected $zip5;
