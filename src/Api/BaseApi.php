@@ -3,117 +3,48 @@
 namespace jamesvweston\USPS\Api;
 
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use jamesvweston\USPS\Exceptions\USPS\InvalidUSPSUserException;
-use jamesvweston\USPS\Exceptions\USPS\USPSConnectionException;
 use jamesvweston\USPS\Exceptions\USPS\USPSUnknownException;
 use jamesvweston\USPS\Exceptions\USPS\USPSXMLSyntaxException;
-use jamesvweston\Utilities\StringUtil;
-use jamesvweston\USPS\Utilities\XMLUtil;
+use jamesvweston\USPS\Responses\USPSError;
+use jamesvweston\USPS\Utilities\Data\USPSExceptionDataUtil;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
-abstract class BaseApi
+class BaseApi
 {
-    
-    /**
-     * @var ApiConfiguration
-     */
-    protected $apiConfiguration;
 
     /**
-     * @var Client
+     * @var ApiClient
      */
-    private $guzzle;
+    protected $apiClient;
+
     
-    
-    public function __construct(ApiConfiguration $apiConfiguration)
+    /**
+     * @param ApiClient $apiClient
+     */
+    public function __construct(ApiClient $apiClient)
     {
-        $this->apiConfiguration         = $apiConfiguration;
+        $this->apiClient                = $apiClient;
     }
 
     /**
-     * @param       string      $xml
-     * @param       string      $api
-     * @return      array
-     * @throws      USPSConnectionException
-     * @throws      USPSXMLSyntaxException
-     * @throws      \Exception
-     */
-    protected function call($xml, $api)
-    {
-        $xml                            = str_replace('{USER_ID}', $this->apiConfiguration->getUserId(), $xml);
-        $url                            = $this->apiConfiguration->getBaseURL() . '?API=' . $api . '&XML=' . $xml;
-        
-        try
-        {
-            $this->guzzle                   = new Client();
-            $response                       = $this->guzzle->get($url);
-        }
-        catch (RequestException $ex)
-        {
-            throw new USPSConnectionException();
-        } catch (\Exception $ex)
-        {
-            throw new USPSConnectionException();
-        }
-        
-        $contents                       = $response->getBody()->getContents();
-
-        if (empty($contents) || is_null($contents))
-            throw new USPSConnectionException();
-
-        $responseArray                  = XMLUtil::createArray($contents);
-        
-        if ($this->responseHasError($responseArray))
-            $this->parseResponseErrors($responseArray['Error']['Description']);
-        
-        return $responseArray;
-    }
-
-    /**
-     * @param   string      $description
-     * @throws  InvalidUSPSUserException
-     * @throws  USPSUnknownException
-     * @throws  USPSXMLSyntaxException
-     */
-    private function parseResponseErrors($description)
-    {
-        if (StringUtil::contains('XML Syntax Error', $description))
-            throw new USPSXMLSyntaxException();
-        else if (StringUtil::contains('Username exceeds maximum length', $description)
-            || StringUtil::contains('Authorization failure', $description))
-            throw new InvalidUSPSUserException();
-        else
-            throw new USPSUnknownException($description);
-    }
-    
-    /**
-     * Checks to see if the response has an error
      * @param   array       $response
-     * @return  bool
+     * @param   bool        $throws     Throw the exception
+     * @throws  USPSXMLSyntaxException|InvalidUSPSUserException|USPSUnknownException
+     * @return  USPSError|null
      */
-    protected function responseHasError($response)
+    protected function parseApiResponseError($response, $throws = true)
     {
-        return isset($response['Error']) ? true : false;
+        if (!is_null(AU::get($response['Error'])))
+        {
+            $uspsError                  = new USPSError($response['Error']);
+            $exception                  = USPSExceptionDataUtil::parseApiResponseError($uspsError->getDescription());
+            if ($throws)
+                throw $exception;
+        }
+        
+        return null;
     }
 
-
-
-
-    /**
-     * @return ApiConfiguration
-     */
-    public function getApiConfiguration()
-    {
-        return $this->apiConfiguration;
-    }
-
-    /**
-     * @param ApiConfiguration $apiConfiguration
-     */
-    public function setApiConfiguration($apiConfiguration)
-    {
-        $this->apiConfiguration = $apiConfiguration;
-    }
     
 }

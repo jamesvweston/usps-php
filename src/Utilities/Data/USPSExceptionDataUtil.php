@@ -3,10 +3,7 @@
 namespace jamesvweston\USPS\Utilities\Data;
 
 
-use jamesvweston\USPS\Exceptions\Address\AddressNotFoundException;
-use jamesvweston\USPS\Exceptions\Address\InvalidCityException;
-use jamesvweston\USPS\Exceptions\Address\InvalidStateException;
-use jamesvweston\USPS\Exceptions\Address\MultipleAddressesFoundException;
+use jamesvweston\USPS\Exceptions\USPS\InvalidUSPSUserException;
 use jamesvweston\USPS\Exceptions\USPS\USPSUnknownException;
 use jamesvweston\USPS\Exceptions\USPS\USPSXMLSyntaxException;
 use jamesvweston\Utilities\StringUtil;
@@ -16,20 +13,14 @@ class USPSExceptionDataUtil
 
     /**
      * @param   $description
-     * @return  AddressNotFoundException|InvalidCityException|InvalidStateException|MultipleAddressesFoundException|USPSUnknownException|USPSXMLSyntaxException
+     * @return  USPSXMLSyntaxException|InvalidUSPSUserException|USPSUnknownException
      */
-    public static function parseApiErrorDescription($description)
+    public static function parseApiResponseError($description)
     {
         if (StringUtil::contains('XML Syntax Error', $description)) 
             return new USPSXMLSyntaxException();
-        else if (StringUtil::contains('Address Not Found', $description))
-            return new AddressNotFoundException();
-        else if (preg_match("/Multiple addresses were found/", $description))
-            return new MultipleAddressesFoundException();
-        else if (preg_match("/Invalid City/", $description))
-            return new InvalidCityException();
-        else if (preg_match("/Invalid State/", $description))
-            return new InvalidStateException();
+        else if (StringUtil::contains('Invalid USPS USERID', $description))
+            return new InvalidUSPSUserException();
         else
             return new USPSUnknownException($description);
     }
@@ -40,8 +31,19 @@ class USPSExceptionDataUtil
      */
     public static function normalizeErrorDescription($description)
     {
+        //  XML errors
         if (preg_match("/XML Syntax Error/", $description))
             return self::getXMLSyntaxErrorMessage();
+            
+            
+        //  Authentication errors
+        else if (preg_match("/Username exceeds maximum length/", $description))
+            return self::getInvalidUSPSUserMessage();
+        else if (preg_match("/Authorization failure/", $description))
+            return self::getInvalidUSPSUserMessage();
+            
+            
+        //  Address    
         else if (preg_match("/Address Not Found/", $description))
             return self::getAddressNotFoundMessage();
         else if (preg_match("/Multiple addresses were found/", $description))
@@ -156,7 +158,7 @@ class USPSExceptionDataUtil
      */
     public static function getInvalidUSPSUserMessage()
     {
-        return 'Invalid USPS_USER_ID';
+        return 'Invalid USPS USERID';
     }
 
     /**

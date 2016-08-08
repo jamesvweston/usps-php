@@ -10,7 +10,7 @@ class XMLUtil
 {
     private static $xml = null;
     private static $encoding = 'UTF-8';
-    /**
+    /**\
      * Initialize the root XML node [optional]
      *
      * @param $version

@@ -2,17 +2,18 @@
 
 namespace jamesvweston\USPS\Utilities\Data;
 
-use jamesvweston\USPS\Models\Address;
+
+use jamesvweston\USPS\Requests\AddressVerifyRequestItem;
 
 class AddressDataUtil
 {
 
     /**
-     * @return Address
+     * @return AddressVerifyRequestItem
      */
     public static function getSanDiegoConventionCenter()
     {
-        $address                = new Address();
+        $address                = new AddressVerifyRequestItem();
         $address->setAddress2('111 W Harbor Dr');
         $address->setCity('San Diego');
         $address->setState('CA');
@@ -22,11 +23,11 @@ class AddressDataUtil
     }
 
     /**
-     * @return Address
+     * @return AddressVerifyRequestItem
      */
     public static function getSavannahConventionCenter()
     {
-        $address                = new Address();
+        $address                = new AddressVerifyRequestItem();
         $address->setAddress2('1 International Dr');
         $address->setCity('Savannah');
         $address->setState('GA');

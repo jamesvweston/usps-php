@@ -3,7 +3,8 @@
 namespace jamesvweston\tests;
 
 
-use jamesvweston\USPS\Models\Requests\CityStateLookupRequest;
+use jamesvweston\USPS\Config\ApiConfiguration;
+use jamesvweston\USPS\Requests\CityStateLookupRequest;
 use jamesvweston\USPS\USPSClient;
 
 class ApiConfigTest extends \PHPUnit_Framework_TestCase
@@ -24,19 +25,14 @@ class ApiConfigTest extends \PHPUnit_Framework_TestCase
     public function testInvalidUSPSUserId()
     {
         $this->setExpectedException('jamesvweston\USPS\Exceptions\USPS\InvalidUSPSUserException');
+        $apiConfiguration       = new ApiConfiguration();
+        $apiConfiguration->setUserId('asdfasdf');
+        $apiConfiguration->setUseProduction(true);
         
-        $config = [
-            'USPS_USER_ID'      => 'xxxxx',
-            'USPS_ENVIRONMENT'  => 'production',
-        ];
-        
-        $uspsClient             = new USPSClient($config);
-
-        $addressApi             = $uspsClient->getAddressApi();
-
-        $request                = new CityStateLookupRequest();
-        $request->addZipCode(91932);
-        $response               = $addressApi->cityStateLookUp($request);
+        $uspsClient             = new USPSClient($apiConfiguration);
+        $cityStateLookup        = new CityStateLookupRequest();
+        $cityStateLookup->addZipCode('31401');
+        $response               = $uspsClient->addressApi->cityStateLookUp($cityStateLookup);
     }
     
 }

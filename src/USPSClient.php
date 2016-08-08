@@ -5,70 +5,70 @@ namespace jamesvweston\USPS;
 
 use Dotenv\Dotenv;
 use jamesvweston\USPS\Api\AddressApi;
-use jamesvweston\USPS\Api\ApiConfiguration;
+use jamesvweston\USPS\Api\ApiClient;
+use jamesvweston\USPS\Config\ApiConfiguration;
+use jamesvweston\USPS\Config\Contracts\ApiConfiguration AS ApiConfigurationContract;
 use jamesvweston\USPS\Exceptions\InvalidConfigurationException;
-use jamesvweston\Utilities\ArrayUtil;
+use jamesvweston\Utilities\ArrayUtil AS AU;
 
 class USPSClient
 {
 
     /**
-     * @var ApiConfiguration
+     * @var ApiClient
      */
-    protected $apiConfiguration;
+    public $apiClient;
+
+    /**
+     * @var AddressApi
+     */
+    public $addressApi;
 
 
+    /**
+     * @param   ApiConfigurationContract|array|string       $config
+     * @throws  InvalidConfigurationException|\InvalidArgumentException
+     */
     public function __construct($config)
     {
-        if (is_string($config))
+        if ($config instanceof ApiConfigurationContract)
+            $data                           = $config->jsonSerialize();
+        else if (is_string($config))
         {
             if (!is_dir($config))
-                throw new InvalidConfigurationException('The provided directory location does not exist at ' . $config, 400);
+                throw new InvalidConfigurationException('Directory does not exist at ' . $config, 400);
 
             $dotEnv                         = new Dotenv($config);
             $dotEnv->load();
 
             $data = [
                 'userId'                    => getenv('USPS_USER_ID'),
-                'environment'               => getenv('USPS_ENVIRONMENT'),
+                'useProduction'             => getenv('USPS_USE_PRODUCTION'),
             ];
         } else {
-            if (is_array($config)) 
+            if (is_array($config))
             {
                 $data = [
-                    'userId'                => ArrayUtil::get($config['USPS_USER_ID']),
-                    'environment'           => ArrayUtil::get($config['USPS_ENVIRONMENT']),
+                    'userId'                => AU::get($config['userId']),
+                    'useProduction'         => AU::get($config['useProduction']),
                 ];
             } else {
                 throw new \InvalidArgumentException('A configuration must be provided');
             }
         }
         
-        $this->apiConfiguration             = new ApiConfiguration($data);
+        $apiConfiguration           = new ApiConfiguration($data);
+        $this->setApiConfiguration($apiConfiguration);
     }
+    
 
     /**
-     * @return ApiConfiguration
-     */
-    public function getApiConfiguration()
-    {
-        return $this->apiConfiguration;
-    }
-
-    /**
-     * @param ApiConfiguration $apiConfiguration
+     * @param   ApiConfiguration    $apiConfiguration
      */
     public function setApiConfiguration($apiConfiguration)
     {
-        $this->apiConfiguration = $apiConfiguration;
-    }
-
-    /**
-     * @return AddressApi
-     */
-    public function getAddressApi()
-    {
-        return new AddressApi($this->apiConfiguration);
+        $this->apiClient            = new ApiClient($apiConfiguration);
+        $this->addressApi           = new AddressApi($this->apiClient);
     }
     
 }
